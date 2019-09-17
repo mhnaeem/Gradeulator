@@ -94,9 +94,10 @@ class Course{
             "totalMarks" : ttlMarks,
             "marksReceived" : recMarks,
             "weightage" : weight,
-            "weightageReceived" : this.marksReceived / this.totalMarks * this.weightage;
+            "weightageReceived" : recMarks / ttlMarks * weight
         };
         this.markedStuff.push(obj);
+        console.log(this.markedStuff);
     }
     
     removeMarkedStuff(nm){
@@ -236,3 +237,62 @@ function removeCourse(){
     }
 }
 
+//Test
+currSem = new Semester("Winter 2020");
+currCourse = new Course("COMP 2002");
+currCourse.addMarkedWork("Assignment 1", 100, 90, 1);
+currCourse.addMarkedWork("Assignment 2", 100, 80, 1);
+currCourse.addMarkedWork("Assignment 3", 100, 70, 1);
+currCourse.addMarkedWork("Assignment 4", 100, 60, 1);
+currCourse.addMarkedWork("Assignment 5", 100, 50, 1);
+currCourse.addMarkedWork("Assignment 6", 100, 40, 1);
+currCourse.addMarkedWork("Assignment 7", 100, 30, 1);
+
+function updateGradesTable(){
+    console.log("hello");
+    var tb = document.getElementById("gradesTable");
+    tb.innerHTML = '';
+    for(var i = 0; i < currCourse.markedStuff.length; i++){
+        var currMW = currCourse.markedStuff[i];
+        tb.innerHTML += '<tr><td>' + currMW.name + '</td><td>' + currMW.totalMarks + '</td><td>' + currMW.marksReceived + '</td><td>' + currMW.weightage + '</td><td>' + currMW.weightageReceived + '</td></tr>';
+    }
+    test();
+}
+
+
+
+function test(){
+      var ctx = document.getElementById("myChart");
+    var l = [];
+    var m = [];
+        currCourse.markedStuff.forEach(function(e){
+            l.push(e.name);
+            m.push(e.marksReceived);
+        })
+      var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: l,
+          datasets: [{
+            data: m,
+            lineTension: 0,
+            backgroundColor: 'transparent',
+            borderColor: '#007bff',
+            borderWidth: 4,
+            pointBackgroundColor: '#007bff'
+          }]
+        },
+        options: {
+          scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero: false
+              }
+            }]
+          },
+          legend: {
+            display: false,
+          }
+        }
+      });
+}
