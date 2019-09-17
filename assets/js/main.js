@@ -100,6 +100,17 @@ class Course{
         console.log(this.markedStuff);
     }
     
+    addMarkedWorkWithoutReceived(nm, ttlMarks, weight){
+        var obj = {
+            "name" : nm,
+            "totalMarks" : ttlMarks,
+            "weightage" : weight,
+            "weightageReceived" : recMarks / ttlMarks * weight
+        };
+        this.markedStuff.push(obj);
+        console.log(this.markedStuff);
+    }
+    
     removeMarkedStuff(nm){
         for (var i = 0; i < this.markedStuff.length; i++){
             if(this.markedStuff.name == nm){
@@ -109,6 +120,14 @@ class Course{
                 }
             }
         }
+    }
+    
+    addMarkReceived(nm, mark){
+        this.markedStuff.forEach(function(e){
+            if(e.name == nm){
+                e.marksReceived = mark;
+            }
+        });
     }
 }
 
@@ -249,19 +268,18 @@ currCourse.addMarkedWork("Assignment 6", 100, 40, 1);
 currCourse.addMarkedWork("Assignment 7", 100, 30, 1);
 
 function updateGradesTable(){
-    console.log("hello");
     var tb = document.getElementById("gradesTable");
     tb.innerHTML = '';
     for(var i = 0; i < currCourse.markedStuff.length; i++){
         var currMW = currCourse.markedStuff[i];
-        tb.innerHTML += '<tr><td>' + currMW.name + '</td><td>' + currMW.totalMarks + '</td><td>' + currMW.marksReceived + '</td><td>' + currMW.weightage + '</td><td>' + currMW.weightageReceived + '</td></tr>';
+        tb.innerHTML += '<tr><td>' + currMW.name + '</td><td>' + currMW.totalMarks + '</td><td>' + currMW.marksReceived + '</td><td>' + currMW.weightage + '</td><td>' + currMW.weightageReceived + '</td><td>' + '<button>remove</button>' + '</td></tr>';
     }
-    test();
+    generateGraph();
 }
 
 
 
-function test(){
+function generateGraph(){
       var ctx = document.getElementById("myChart");
     var l = [];
     var m = [];
@@ -295,4 +313,10 @@ function test(){
           }
         }
       });
+}
+
+function test(){
+    console.log("test");
+    var tb = document.getElementById("gradesTable");
+    tb.innerHTML += '<tr><td>' + '<input type="text" id="mnameinp">' + '</td><td>' + '<input type="text" id="mttlmarksinp">' + '</td><td>' + '<input type="text" id="mrecinp">' + '</td><td>' + '<input type="text" id="mwtinp">' + '</td><td>' + '<input type="text" id="mwtrecinp">' + '</td><td>' + '<button>add</button>' + '</td></tr>';
 }
