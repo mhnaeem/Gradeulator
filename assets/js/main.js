@@ -261,7 +261,7 @@ Course.staticNum = 0;
 
 
 
-var stu = new Student('hh','hh');
+var stu = new Student('Hammad','password');
 var currSem;
 var currCourse;
 
