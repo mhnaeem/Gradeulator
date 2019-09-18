@@ -113,16 +113,13 @@ class Course{
         }
     }
     
-    addMarkReceived(nm, mark){
-        this.markedStuff.forEach(function(e){
-            if(e.name == nm){
-                e.marksReceived = mark;
-            }
-        });
-    }
-    
     getMarkedWorkInfo(currMW){
         return '<tr><td>' + currMW.name + '</td><td>' + currMW.totalMarks + '</td><td>' + currMW.marksReceived + '</td><td>' + currMW.weightage + '</td><td>' + currMW.weightageReceived + '</td><td>' + '<button onclick="modifyMarkedWork(\'' + currMW.name + '\')">Modify</button><button onclick="removeMarkedWork(\'' + currMW.name + '\')">Remove</button>' + '</td></tr>';
+    }
+    
+    calculateWeightReceived(mw){
+        mw.weightageReceived = mw.marksReceived / mw.totalMarks * mw.weightage; 
+        return mw.weightageReceived;
     }
 }
 //Course class complete
@@ -292,13 +289,14 @@ function removeCourse(){
 //Test
 currSem = new Semester("Winter 2020");
 currCourse = new Course("COMP 2002");
-currCourse.addMarkedWork("Assignment 1", 100, 30, 10);
+currCourse.addMarkedWork("Assignment 1", 100, 30, 20);
 currCourse.addMarkedWork("Assignment 2", 100, 40, 10);
 currCourse.addMarkedWork("Assignment 3", 100, 50, 5);
-currCourse.addMarkedWork("Assignment 4", 100, 90, 4);
+currCourse.addMarkedWork("Assignment 4", 100, 90, 5);
 currCourse.addMarkedWork("Assignment 5", 100, 50, 25);
-currCourse.addMarkedWork("Assignment 6", 100, 60, 50);
-currCourse.addMarkedWork("Assignment 7", 100, 70, 1);
+currCourse.addMarkedWork("Assignment 6", 100, 60, 15);
+currCourse.addMarkedWork("Assignment 7", 100, 25, 10);
+currCourse.addMarkedWork("Assignment 8", 100, 70, 5);
 
 function updateGradesTable(){
     var tb = document.getElementById("gradesTable");
@@ -307,9 +305,14 @@ function updateGradesTable(){
         var currM = currCourse.markedStuff[i];
         tb.innerHTML += currCourse.getMarkedWorkInfo(currM);
     }
+    tb.innerHTML += '<tr><td>' + '<input type="text" id="mnameinp">' + '</td><td>' + '<input type="text" id="mttlmarksinp">' + '</td><td>' + '<input type="text" id="mrecinp">' + '</td><td>' + '<input type="text" id="mwtinp">' + '</td><td></td><td>' + '<button onclick="addNewCourseButton()">Add</button>' + '</td></tr>';
     generateGraph();
 }
 
+function addNewCourseButton(){
+    currCourse.addMarkedWork(document.getElementById("mnameinp").value, document.getElementById("mttlmarksinp").value, document.getElementById("mrecinp").value, document.getElementById("mwtinp").value);
+    updateGradesTable();
+}
 
 function modifyMarkedWork(name){
     var tb = document.getElementById("gradesTable");
@@ -321,8 +324,7 @@ function modifyMarkedWork(name){
             var inp2 = '<input type=text id="modifyMWTTL" value="' + currMW.totalMarks + '">';
             var inp3 = '<input type=text id="modifyMWMarkRec" value="' + currMW.marksReceived + '">';
             var inp4 = '<input type=text id="modifyMWWeightage" value="' + currMW.weightage + '">';
-            var inp5 = '<input type=text id="modifyMWWeightRec" value="' + currMW.weightageReceived + '">';
-            var info = '<tr><td>' + inp1 + '</td><td>' + inp2 + '</td><td>' + inp3 + '</td><td>' + inp4 + '</td><td>' + inp5 + '</td><td>' + '<button onclick="addModifiedMarkedWork(\'' + currMW.name + '\')">Add</button><button onclick="removeMarkedWork(\'' + currMW.name + '\')">Remove</button>' + '</td></tr>';
+            var info = '<tr><td>' + inp1 + '</td><td>' + inp2 + '</td><td>' + inp3 + '</td><td>' + inp4 + '</td><td>' + currCourse.calculateWeightReceived(currMW) + '</td><td>' + '<button onclick="addModifiedMarkedWork(\'' + currMW.name + '\')">Add</button><button onclick="removeMarkedWork(\'' + currMW.name + '\')">Remove</button>' + '</td></tr>';
             var newRow = tb.innerHTML.replace(currCourse.getMarkedWorkInfo(currMW),info);
             tb.innerHTML = newRow;
         }
@@ -339,7 +341,7 @@ function addModifiedMarkedWork(name){
             currMW.totalMarks = document.getElementById("modifyMWTTL").value;
             currMW.marksReceived = document.getElementById("modifyMWMarkRec").value;
             currMW.weightage = document.getElementById("modifyMWWeightage").value;
-            currMW.weightageReceived = document.getElementById("modifyMWWeightRec").value;
+            currMW.weightageReceived = currCourse.calculateWeightReceived(currMW);
         }
     }
     updateGradesTable();
@@ -358,15 +360,26 @@ function removeMarkedWork(name){
 
 
 function generateGraph(){
-      var ctx = document.getElementById("myChart");
+    
+    var dynamicColors = function() {
+    var r = Math.floor(Math.random() * 255);
+    var g = Math.floor(Math.random() * 255);
+    var b = Math.floor(Math.random() * 255);
+    return "rgb(" + r + "," + g + "," + b + ")";
+    }
+    
+    var ctx = document.getElementById("myChart");
     var l = [];
     var m = [];
     var w = [];
-        currCourse.markedStuff.forEach(function(e){
+    var sum = 0.0;
+    currCourse.markedStuff.forEach(function(e){
             l.push(e.name);
             m.push(e.marksReceived);
             w.push(e.weightage);
-        })
+            sum += e.weightage;
+        });
+
       var myChart = new Chart(ctx, {
         type: 'line',
         data: {
@@ -394,21 +407,38 @@ function generateGraph(){
         }
       });
     
-    ctx = document.getElementById("myPie")
+    ctx = document.getElementById("myPie");
+    
+    if(sum < 100){
+        w.push();
+        l.push("Unassigned");
+    }
+    if(sum >= 100){
+        for (var i = 0; i < l.length; i++){
+            if(l[i] == "Unassigned"){
+                var index = l.indexOf(l[i]);
+                if (index > -1) {
+                  l.splice(index, 1);
+                }
+                index = w.indexOf(w[i]);
+                 if (index > -1) {
+                  w.splice(index, 1);
+                }               
+            }
+        }
+    }
+    
+    var bgC = [];
+    l.forEach(function(){
+        bgC.push(dynamicColors());
+    });
     
     var data = {
     labels: l,
       datasets: [
         {
             fill: true,
-            backgroundColor: [
-                'black',
-                'teal', 
-                'yellow',
-                'blue',
-                'red',
-                'pink',
-                'brown'],
+            backgroundColor: bgC,
             data: w,
         }
     ]
@@ -434,8 +464,10 @@ function generateGraph(){
     });
 }
 
-function test(){
-    console.log("test");
-    var tb = document.getElementById("gradesTable");
-    tb.innerHTML += '<tr><td>' + '<input type="text" id="mnameinp">' + '</td><td>' + '<input type="text" id="mttlmarksinp">' + '</td><td>' + '<input type="text" id="mrecinp">' + '</td><td>' + '<input type="text" id="mwtinp">' + '</td><td>' + '<input type="text" id="mwtrecinp">' + '</td><td>' + '<button>add</button>' + '</td></tr>';
+
+
+
+function updateGUI(){
+    
 }
+
