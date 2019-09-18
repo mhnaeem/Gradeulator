@@ -74,10 +74,10 @@
             <!-- Semesters -->
             <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
               <span>Semesters</span>
-              <a class="d-flex align-items-center text-muted" href="#" onclick="addSemester()">
+              <a class="d-flex align-items-center text-muted" href="#" onclick="stu.addSemester()">
                 <span data-feather="plus-circle"></span>
               </a>
-              <a class="d-flex align-items-center text-muted" href="#" onclick="removeSemester()">
+              <a class="d-flex align-items-center text-muted" href="#" onclick="stu.removeSemester()">
                 <span data-feather="minus-circle"></span>
               </a>
             </h6>
@@ -86,10 +86,10 @@
               
             <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
               <span>Courses</span>
-              <a class="d-flex align-items-center text-muted" href="#" onclick="addCourse()">
+              <a class="d-flex align-items-center text-muted" href="#" onclick="currSem.addCourse()">
                 <span data-feather="plus-circle"></span>
               </a>
-              <a class="d-flex align-items-center text-muted" href="#" onclick="removeCourse()">
+              <a class="d-flex align-items-center text-muted" href="#" onclick="currSem.removeCourse()">
                 <span data-feather="minus-circle"></span>
               </a>
             </h6>
@@ -108,7 +108,7 @@
           <canvas class="my-4" id="myPie" width="900" height="380"></canvas>
             
           <h2>Current Grades</h2>
-            <button onclick="updateGradesTable()">updatepage</button>
+            <button onclick="updateGradesTable()">updatepage</button><button onclick="test()">Test Populate</button>
           <div class="table-responsive">
             <table class="table table-striped table-sm">
               <thead>

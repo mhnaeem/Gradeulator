@@ -6,22 +6,56 @@ class Student{
         this.sems = [];
     }
 
-    addSemester(semName){
-        var sem = new Semester(semName);
-        this.sems.push(sem);
-        sem.putSemOnScreen();
+    addSemester(){
+        alert("Add a semester, input the name in the field and then press enter. To cancel input a blank space and then press enter");
+        var semsBar = document.getElementById("semesters");
+        semsBar.innerHTML += '<li class="nav-item"><input type="text" id="newSemInp"></li>';
+
+        document.getElementById('newSemInp').onkeypress = function(e){
+            if (!e) e = window.event;
+            var keyCode = e.keyCode || e.which;
+            if (keyCode == '13'){
+              // Enter pressed
+              var inptVal = document.getElementById("newSemInp").value;
+              if(inptVal == " " || inptVal == ""){
+                  return;
+              }
+              semsBar.innerHTML = semsBar.innerHTML.replace('<li class="nav-item"><input type="text" id="newSemInp"></li>','');
+              var sem = new Semester(inptVal);
+              stu.sems.push(sem);
+              sem.putSemOnScreen();
+            }
+        }
     }
     
     removeSemester(semName){
-        for (var i = 0; i < this.sems.length; i++){
-            if(this.sems[i].getSemesterName() == semName){
-                document.getElementById("semesters").innerHTML = document.getElementById("semesters").innerHTML.replace(this.sems[i].semInfo(),'');
-                var index = this.sems.indexOf(this.sems[i]);
-                if (index > -1) {
-                  this.sems.splice(index, 1);
-                }
+        alert("About to delete a semester, to cancel input a blank space and then press Enter");  
+        
+        var semBar = document.getElementById("semesters");
+        semBar.innerHTML += '<li class="nav-item"><input type="text" id="delSem"></li>';
+
+        document.getElementById('delSem').onkeypress = function(e){
+            if (!e) e = window.event;
+            var keyCode = e.keyCode || e.which;
+            if (keyCode == '13'){
+              // Enter pressed
+              var inptVal = document.getElementById("delSem").value; 
+              if(inptVal == ""){
+                return;
+              }  
+              semBar.innerHTML = semBar.innerHTML.replace('<li class="nav-item"><input type="text" id="delSem"></li>','');
+                
+              for (var i = 0; i < stu.sems.length; i++){
+                  if(stu.sems[i].getSemesterName() == inptVal){
+                    semBar.innerHTML = semBar.innerHTML.replace(stu.sems[i].semInfo(),'');
+                    var index = stu.sems.indexOf(stu.sems[i]);
+                    if (index > -1) {
+                      stu.sems.splice(index, 1);
+                    }
+                  }
+              }
             }
-        }
+        }    
     }
 }
 //Student Class Complete
@@ -49,19 +83,54 @@ class Semester{
         return '<li class="nav-item"><a class="nav-link" href="#" onclick="selectSem('+this.semNum+')"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg> <span data-feather="file-text"></span>' + this.semesterName + '</a> </li>';
     }
     
-    addCourse(nm){
-        var cr = new Course(nm);
-        this.courses.push(cr);
-        cr.putCrOnScreen();
+    addCourse(){
+        alert("Add a course, input the name in the field and then press enter. To cancel input a blank space and then press enter");
+        
+        var crs = document.getElementById("courses");
+        crs.innerHTML += '<li class="nav-item"><input type="text" id="newCourseInp"></li>';
+
+        document.getElementById('newCourseInp').onkeypress = function(e){
+            if (!e) e = window.event;
+            var keyCode = e.keyCode || e.which;
+            if (keyCode == '13'){
+              // Enter pressed
+              var inptVal = document.getElementById("newCourseInp").value;
+              if(inptVal == " " || inptVal == ""){
+                  return;
+              }
+              crs.innerHTML = crs.innerHTML.replace('<li class="nav-item"><input type="text" id="newCourseInp"></li>','');
+              var cr = new Course(inptVal);
+              currSem.courses.push(cr);
+              cr.putCrOnScreen();                
+            }
+        }
     }
     
-    removeCourse(crName){
-        for (var i = 0; i < this.courses.length; i++){
-            if(this.courses[i].courseName == crName){
-                document.getElementById("courses").innerHTML = document.getElementById("courses").innerHTML.replace(this.courses[i].crInfo(),'');
-                var index = this.courses.indexOf(this.courses[i]);
-                if (index > -1) {
-                  this.courses.splice(index, 1);
+    removeCourse(){
+        alert("About to delete a semester, to cancel input a blank space and then press Enter");  
+        
+        var crs = document.getElementById("courses");
+        crs.innerHTML += '<li class="nav-item"><input type="text" id="delCr"></li>';
+
+        document.getElementById('delCr').onkeypress = function(e){
+            if (!e) e = window.event;
+            var keyCode = e.keyCode || e.which;
+            if (keyCode == '13'){
+              // Enter pressed
+              var inptVal = document.getElementById("delCr").value; 
+              if(inptVal == ""){
+                return;
+              }  
+              crs.innerHTML = crs.innerHTML.replace('<li class="nav-item"><input type="text" id="delCr"></li>','');
+              
+              for (var i = 0; i < currSem.courses.length; i++){
+                    if(currSem.courses[i].courseName == inptVal){
+                        crs.innerHTML = crs.innerHTML.replace(currSem.courses[i].crInfo(),'');
+                        var index = currSem.courses.indexOf(currSem.courses[i]);
+                        if (index > -1) {
+                          currSem.courses.splice(index, 1);
+                        }
+                    }
                 }
             }
         }
@@ -128,6 +197,7 @@ class Course{
 Course.staticNum = 0;
 
 
+
 var stu = new Student('hh','hh');
 var currSem;
 var currCourse;
@@ -149,6 +219,7 @@ function selectSem(n){
             currSem = stu.sems[i];
         }
     }
+    
     var bar = document.getElementById("courses");
     bar.innerHTML = "";
     if(currSem.courses.length >= 1){
@@ -184,7 +255,6 @@ function selectCr(n){
         }
     }
     
-    
     for(var i = 0; i < crsBarCrs.length; i++){
         var test = "selectCr(" + n + ")";
         if(crsBarCrs[i].getAttribute("onclick") == test){
@@ -193,96 +263,6 @@ function selectCr(n){
     }
 }
 //Select a course complete
-
-//GUI part of adding a semester
-function addSemester(){
-    alert("Add a semester, input the name in the field and then press enter. To cancel input a blank space and then press enter");
-    var sems = document.getElementById("semesters");
-    sems.innerHTML += '<li class="nav-item"><input type="text" id="newSemInp"></li>';
-    
-    document.getElementById('newSemInp').onkeypress = function(e){
-        if (!e) e = window.event;
-        var keyCode = e.keyCode || e.which;
-        if (keyCode == '13'){
-          // Enter pressed
-          var inptVal = document.getElementById("newSemInp").value;
-          if(inptVal == " " || inptVal == ""){
-              return;
-          }
-          sems.innerHTML = sems.innerHTML.replace('<li class="nav-item"><input type="text" id="newSemInp"></li>','');
-          stu.addSemester(inptVal);
-        }
-    }
-}
-//Add semester complete
-
-//GUI part of adding a course
-function addCourse(){
-    alert("Add a course, input the name in the field and then press enter. To cancel input a blank space and then press enter");
-    var crs = document.getElementById("courses");
-    crs.innerHTML += '<li class="nav-item"><input type="text" id="newCourseInp"></li>';
-    
-    document.getElementById('newCourseInp').onkeypress = function(e){
-        if (!e) e = window.event;
-        var keyCode = e.keyCode || e.which;
-        if (keyCode == '13'){
-          // Enter pressed
-          var inptVal = document.getElementById("newCourseInp").value;
-          if(inptVal == " " || inptVal == ""){
-              return;
-          }
-          crs.innerHTML = crs.innerHTML.replace('<li class="nav-item"><input type="text" id="newCourseInp"></li>','');
-          currSem.addCourse(inptVal);
-        }
-    }
-}
-//Add course complete
-
-//GUI part of removing a semester
-function removeSemester(){
-    alert("About to delete a semester, to cancel input a blank space and then press Enter");  
-    var sems = document.getElementById("semesters");
-    sems.innerHTML += '<li class="nav-item"><input type="text" id="delSem"></li>';
-    
-    document.getElementById('delSem').onkeypress = function(e){
-        if (!e) e = window.event;
-        var keyCode = e.keyCode || e.which;
-        if (keyCode == '13'){
-          // Enter pressed
-          var inptVal = document.getElementById("delSem").value; 
-          if(inptVal == ""){
-            return;
-          }  
-          sems.innerHTML = sems.innerHTML.replace('<li class="nav-item"><input type="text" id="delSem"></li>','');
-          stu.removeSemester(inptVal);
-        }
-    }
-}
-//Remove semester complete
-
-//GUI part of removing a course
-function removeCourse(){
-    alert("About to delete a semester, to cancel input a blank space and then press Enter");  
-    var crs = document.getElementById("courses");
-    crs.innerHTML += '<li class="nav-item"><input type="text" id="delCr"></li>';
-    
-    document.getElementById('delCr').onkeypress = function(e){
-        if (!e) e = window.event;
-        var keyCode = e.keyCode || e.which;
-        if (keyCode == '13'){
-          // Enter pressed
-          var inptVal = document.getElementById("delCr").value; 
-          if(inptVal == ""){
-            return;
-          }  
-          crs.innerHTML = crs.innerHTML.replace('<li class="nav-item"><input type="text" id="delCr"></li>','');
-          currSem.removeCourse(inptVal);
-        }
-    }
-}
-//Remove course complete
-
-
 
 
 
@@ -467,7 +447,8 @@ function generateGraph(){
 
 
 
-function updateGUI(){
+function test(){
     
 }
+
 
