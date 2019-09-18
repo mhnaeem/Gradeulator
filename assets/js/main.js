@@ -28,6 +28,7 @@ class Student{
         }
     }
     
+    
     removeSemester(semName){
         alert("About to delete a semester, to cancel input a blank space and then press Enter");  
         
@@ -56,6 +57,13 @@ class Student{
               }
             }
         }    
+    }
+    
+    //Test, remove later
+    testAddSem(nm){
+        var sem = new Semester(nm);
+        stu.sems.push(sem);
+        sem.putSemOnScreen();        
     }
 }
 //Student Class Complete
@@ -134,7 +142,14 @@ class Semester{
                 }
             }
         }
-    }    
+    }
+    
+    //For test purposes remove later
+    testAddCourse(nm){
+        var cr = new Course(nm);
+        currSem.courses.push(cr);
+        cr.putCrOnScreen();          
+    }
 }
 //Semester class complete
 
@@ -160,18 +175,19 @@ class Course{
         return '<li class="nav-item"><a class="nav-link" href="#" onclick="selectCr('+this.courseNum+')"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg> <span data-feather="file-text"></span>' + this.courseName + '</a> </li>';
     }
     
-    addMarkedWork(nm = '', ttlMarks = 0.0, recMarks = 0.0, weight = 0.0){
+    addMarkedWork(){ 
         var obj = {
-            "name" : nm,
-            "totalMarks" : ttlMarks,
-            "marksReceived" : recMarks,
-            "weightage" : weight,
-            "weightageReceived" : recMarks / ttlMarks * weight
+            "name" : document.getElementById("mnameinp").value,
+            "totalMarks" : document.getElementById("mttlmarksinp").value,
+            "marksReceived" : document.getElementById("mrecinp").value,
+            "weightage" : document.getElementById("mwtinp").value,
+            "weightageReceived" : document.getElementById("mrecinp").value / document.getElementById("mttlmarksinp").value * document.getElementById("mwtinp").value
         };
         this.markedStuff.push(obj);
+        updateGradesTable();
     }
     
-    removeMarkedStuff(nm){
+    removeMarkedWork(nm){
         for (var i = 0; i < this.markedStuff.length; i++){
             if(this.markedStuff[i].name == nm){
                 var index = this.markedStuff.indexOf(this.markedStuff[i]);
@@ -180,15 +196,62 @@ class Course{
                 }
             }
         }
+        updateGradesTable();
     }
     
     getMarkedWorkInfo(currMW){
-        return '<tr><td>' + currMW.name + '</td><td>' + currMW.totalMarks + '</td><td>' + currMW.marksReceived + '</td><td>' + currMW.weightage + '</td><td>' + currMW.weightageReceived + '</td><td>' + '<button onclick="modifyMarkedWork(\'' + currMW.name + '\')">Modify</button><button onclick="removeMarkedWork(\'' + currMW.name + '\')">Remove</button>' + '</td></tr>';
+        return '<tr><td>' + currMW.name + '</td><td>' + currMW.totalMarks + '</td><td>' + currMW.marksReceived + '</td><td>' + currMW.weightage + '</td><td>' + currMW.weightageReceived + '</td><td>' + '<button onclick="currCourse.modifyMarkedWork(\'' + currMW.name + '\')">Modify</button><button onclick="currCourse.removeMarkedWork(\'' + currMW.name + '\')">Remove</button>' + '</td></tr>';
     }
     
     calculateWeightReceived(mw){
         mw.weightageReceived = mw.marksReceived / mw.totalMarks * mw.weightage; 
         return mw.weightageReceived;
+    }
+    
+    addModifiedMarkedWork(name){
+        var tb = document.getElementById("gradesTable");
+
+        for(var i = 0; i < currCourse.markedStuff.length; i++){
+            var currMW = currCourse.markedStuff[i];
+            if (currMW.name == name){
+                currMW.name = document.getElementById("modifyMWName").value;
+                currMW.totalMarks = document.getElementById("modifyMWTTL").value;
+                currMW.marksReceived = document.getElementById("modifyMWMarkRec").value;
+                currMW.weightage = document.getElementById("modifyMWWeightage").value;
+                currMW.weightageReceived = currCourse.calculateWeightReceived(currMW);
+            }
+        }
+        updateGradesTable();
+    }  
+
+    modifyMarkedWork(name){
+        var tb = document.getElementById("gradesTable");
+
+        for(var i = 0; i < currCourse.markedStuff.length; i++){
+            var currMW = currCourse.markedStuff[i];
+            if (currMW.name == name){
+                var inp1 = '<input type=text id="modifyMWName" value="' + currMW.name + '">';
+                var inp2 = '<input type=text id="modifyMWTTL" value="' + currMW.totalMarks + '">';
+                var inp3 = '<input type=text id="modifyMWMarkRec" value="' + currMW.marksReceived + '">';
+                var inp4 = '<input type=text id="modifyMWWeightage" value="' + currMW.weightage + '">';
+                var info = '<tr><td>' + inp1 + '</td><td>' + inp2 + '</td><td>' + inp3 + '</td><td>' + inp4 + '</td><td>' + currCourse.calculateWeightReceived(currMW) + '</td><td>' + '<button onclick="currCourse.addModifiedMarkedWork(\'' + currMW.name + '\')">Add</button><button onclick="currCourse.removeMarkedWork(\'' + currMW.name + '\')">Remove</button>' + '</td></tr>';
+                var newRow = tb.innerHTML.replace(currCourse.getMarkedWorkInfo(currMW),info);
+                tb.innerHTML = newRow;
+            }
+        }
+    }    
+    
+    //For testing remove later
+    testAddMarkedWork(nm, ttlm, mrec, wt){ 
+        var obj = {
+            "name" : nm,
+            "totalMarks" : ttlm,
+            "marksReceived" : mrec,
+            "weightage" : wt,
+            "weightageReceived" : mrec / ttlm * wt
+        };
+        this.markedStuff.push(obj);
+        updateGradesTable();
     }
 }
 //Course class complete
@@ -234,6 +297,9 @@ function selectSem(n){
             semBarSems[i].setAttribute("class", "nav-link active");
         }
     }
+    if (currSem.courses.length > 0){
+        selectCr(currSem.courses[0].courseNum);
+    }
 }
 //Select a semester complete
 
@@ -261,84 +327,11 @@ function selectCr(n){
             crsBarCrs[i].setAttribute("class", "nav-link active");
         }
     }
+    updateGradesTable();
 }
 //Select a course complete
 
-
-
-//Test
-currSem = new Semester("Winter 2020");
-currCourse = new Course("COMP 2002");
-currCourse.addMarkedWork("Assignment 1", 100, 30, 20);
-currCourse.addMarkedWork("Assignment 2", 100, 40, 10);
-currCourse.addMarkedWork("Assignment 3", 100, 50, 5);
-currCourse.addMarkedWork("Assignment 4", 100, 90, 5);
-currCourse.addMarkedWork("Assignment 5", 100, 50, 25);
-currCourse.addMarkedWork("Assignment 6", 100, 60, 15);
-currCourse.addMarkedWork("Assignment 7", 100, 25, 10);
-currCourse.addMarkedWork("Assignment 8", 100, 70, 5);
-
-function updateGradesTable(){
-    var tb = document.getElementById("gradesTable");
-    tb.innerHTML = '';
-    for(var i = 0; i < currCourse.markedStuff.length; i++){
-        var currM = currCourse.markedStuff[i];
-        tb.innerHTML += currCourse.getMarkedWorkInfo(currM);
-    }
-    tb.innerHTML += '<tr><td>' + '<input type="text" id="mnameinp">' + '</td><td>' + '<input type="text" id="mttlmarksinp">' + '</td><td>' + '<input type="text" id="mrecinp">' + '</td><td>' + '<input type="text" id="mwtinp">' + '</td><td></td><td>' + '<button onclick="addNewCourseButton()">Add</button>' + '</td></tr>';
-    generateGraph();
-}
-
-function addNewCourseButton(){
-    currCourse.addMarkedWork(document.getElementById("mnameinp").value, document.getElementById("mttlmarksinp").value, document.getElementById("mrecinp").value, document.getElementById("mwtinp").value);
-    updateGradesTable();
-}
-
-function modifyMarkedWork(name){
-    var tb = document.getElementById("gradesTable");
-    
-    for(var i = 0; i < currCourse.markedStuff.length; i++){
-        var currMW = currCourse.markedStuff[i];
-        if (currMW.name == name){
-            var inp1 = '<input type=text id="modifyMWName" value="' + currMW.name + '">';
-            var inp2 = '<input type=text id="modifyMWTTL" value="' + currMW.totalMarks + '">';
-            var inp3 = '<input type=text id="modifyMWMarkRec" value="' + currMW.marksReceived + '">';
-            var inp4 = '<input type=text id="modifyMWWeightage" value="' + currMW.weightage + '">';
-            var info = '<tr><td>' + inp1 + '</td><td>' + inp2 + '</td><td>' + inp3 + '</td><td>' + inp4 + '</td><td>' + currCourse.calculateWeightReceived(currMW) + '</td><td>' + '<button onclick="addModifiedMarkedWork(\'' + currMW.name + '\')">Add</button><button onclick="removeMarkedWork(\'' + currMW.name + '\')">Remove</button>' + '</td></tr>';
-            var newRow = tb.innerHTML.replace(currCourse.getMarkedWorkInfo(currMW),info);
-            tb.innerHTML = newRow;
-        }
-    }
-}
-
-function addModifiedMarkedWork(name){
-    var tb = document.getElementById("gradesTable");
-    
-    for(var i = 0; i < currCourse.markedStuff.length; i++){
-        var currMW = currCourse.markedStuff[i];
-        if (currMW.name == name){
-            currMW.name = document.getElementById("modifyMWName").value;
-            currMW.totalMarks = document.getElementById("modifyMWTTL").value;
-            currMW.marksReceived = document.getElementById("modifyMWMarkRec").value;
-            currMW.weightage = document.getElementById("modifyMWWeightage").value;
-            currMW.weightageReceived = currCourse.calculateWeightReceived(currMW);
-        }
-    }
-    updateGradesTable();
-}
-
-function removeMarkedWork(name){
-    var info;
-    currCourse.markedStuff.forEach(function(e){
-        if(e.name == name){
-            info = currCourse.getMarkedWorkInfo(e);
-        }
-    });
-    currCourse.removeMarkedStuff(name);
-    updateGradesTable();
-}
-
-
+//Create line graph and pie chart for current course
 function generateGraph(){
     
     var dynamicColors = function() {
@@ -443,12 +436,110 @@ function generateGraph(){
         options: options
     });
 }
+//Create line graph and pie chart for current course complete
 
-
-
-
-function test(){
-    
+//Updates the grades table and graphs
+function updateGradesTable(){
+    var tb = document.getElementById("gradesTable");
+    tb.innerHTML = '';
+    for(var i = 0; i < currCourse.markedStuff.length; i++){
+        var currM = currCourse.markedStuff[i];
+        tb.innerHTML += currCourse.getMarkedWorkInfo(currM);
+    }
+    tb.innerHTML += '<tr><td>' + '<input type="text" id="mnameinp">' + '</td><td>' + '<input type="text" id="mttlmarksinp">' + '</td><td>' + '<input type="text" id="mrecinp">' + '</td><td>' + '<input type="text" id="mwtinp">' + '</td><td></td><td>' + '<button onclick="currCourse.addMarkedWork()">Add</button>' + '</td></tr>';
+    generateGraph();
 }
+//Update grades table and graph complete
 
-
+//Generates random test data
+function test(){
+    var assList = ["Assignment 1", "Assignment 2", "Assignment 3", "Assignment 4", "Assignment 5", "Assignment 6", "Assignment 7"];
+    var weightList = [25, 15, 10, 10, 5, 5, 30];
+    var randMark = function getRandomInt(min, max) {
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
+    }
+    
+    stu.testAddSem("Fall 2019");
+    stu.testAddSem("Winter 2019");
+    stu.testAddSem("Fall 2020");
+    stu.testAddSem("Winter 2020");
+    
+    selectSem("0");
+    currSem.testAddCourse("COMP 1000");
+    currSem.testAddCourse("COMP 1001");
+    currSem.testAddCourse("COMP 1002");
+    selectCr("0");
+    for(var i = 0; i < assList.length; i++){
+        currCourse.testAddMarkedWork(assList[i], 100, randMark(0,101), weightList[i]);
+    }
+    selectCr("1");
+    for(var i = 0; i < assList.length; i++){
+        currCourse.testAddMarkedWork(assList[i], 100, randMark(0,101), weightList[i]);
+    }
+    selectCr("2");
+    for(var i = 0; i < assList.length; i++){
+        currCourse.testAddMarkedWork(assList[i], 100, randMark(0,101), weightList[i]);
+    }
+    
+    selectSem("1");
+    currSem.testAddCourse("BUSI 1000");
+    currSem.testAddCourse("BUSI 1001");
+    currSem.testAddCourse("BUSI 1002");
+    currSem.testAddCourse("BUSI 1003");
+    selectCr("3");
+    for(var i = 0; i < assList.length; i++){
+        currCourse.testAddMarkedWork(assList[i], 100, randMark(0,101), weightList[i]);
+    }
+    selectCr("4");
+    for(var i = 0; i < assList.length; i++){
+        currCourse.testAddMarkedWork(assList[i], 100, randMark(0,101), weightList[i]);
+    }
+    selectCr("5");
+    for(var i = 0; i < assList.length; i++){
+        currCourse.testAddMarkedWork(assList[i], 100, randMark(0,101), weightList[i]);
+    }
+    selectCr("6");
+    for(var i = 0; i < assList.length; i++){
+        currCourse.testAddMarkedWork(assList[i], 100, randMark(0,101), weightList[i]);
+    }
+    
+    selectSem("2");
+    currSem.testAddCourse("BUSI 4000");
+    currSem.testAddCourse("BUSI 4500");
+    currSem.testAddCourse("BUSI 1600");
+    currSem.testAddCourse("COMP 2550");
+    selectCr("7");
+    for(var i = 0; i < assList.length; i++){
+        currCourse.testAddMarkedWork(assList[i], 100, randMark(0,101), weightList[i]);
+    }
+    selectCr("8");
+    for(var i = 0; i < assList.length; i++){
+        currCourse.testAddMarkedWork(assList[i], 100, randMark(0,101), weightList[i]);
+    }
+    selectCr("9");
+    for(var i = 0; i < assList.length; i++){
+        currCourse.testAddMarkedWork(assList[i], 100, randMark(0,101), weightList[i]);
+    }
+    selectCr("10");
+    for(var i = 0; i < assList.length; i++){
+        currCourse.testAddMarkedWork(assList[i], 100, randMark(0,101), weightList[i]);
+    }    
+    
+    selectSem("3");
+    currSem.testAddCourse("ECON 1010");
+    currSem.testAddCourse("ECON 1020");
+    selectCr("11");
+    for(var i = 0; i < assList.length; i++){
+        currCourse.testAddMarkedWork(assList[i], 100, randMark(0,101), weightList[i]);
+    }
+    selectCr("12");
+    for(var i = 0; i < assList.length; i++){
+        currCourse.testAddMarkedWork(assList[i], 100, randMark(0,101), weightList[i]);
+    }
+    
+    selectSem("0");
+    selectCr("0");
+    updateGradesTable();
+}
