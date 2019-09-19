@@ -545,3 +545,4 @@ function getConfirmation() {
    }
 }
 //Makes a confirmation dialog for deleting return user answer true or false complete
+
