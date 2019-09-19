@@ -28,35 +28,30 @@ class Student{
         }
     }
     
+
     
     removeSemester(semName){
-        alert("About to delete a semester, to cancel input a blank space and then press Enter");  
-        
-        var semBar = document.getElementById("semesters");
-        semBar.innerHTML += '<li class="nav-item"><input type="text" id="delSem"></li>';
-
-        document.getElementById('delSem').onkeypress = function(e){
-            if (!e) e = window.event;
-            var keyCode = e.keyCode || e.which;
-            if (keyCode == '13'){
-              // Enter pressed
-              var inptVal = document.getElementById("delSem").value; 
-              if(inptVal == ""){
-                return;
-              }  
-              semBar.innerHTML = semBar.innerHTML.replace('<li class="nav-item"><input type="text" id="delSem"></li>','');
-                
-              for (var i = 0; i < stu.sems.length; i++){
-                  if(stu.sems[i].getSemesterName() == inptVal){
-                    semBar.innerHTML = semBar.innerHTML.replace(stu.sems[i].semInfo(),'');
-                    var index = stu.sems.indexOf(stu.sems[i]);
-                    if (index > -1) {
-                      stu.sems.splice(index, 1);
+        if(getConfirmation() == true){
+            var inptVal = currSem.semesterName;
+            var semBar = document.getElementById("semesters");
+            var temp = '';
+                  for (var i = 0; i < stu.sems.length; i++){
+                        if(stu.sems[i].semesterName == inptVal){
+                            var index = stu.sems.indexOf(stu.sems[i]);
+                            if (index > -1) {
+                              stu.sems.splice(index, 1);
+                            }
+                        }
                     }
-                  }
-              }
-            }
-        }    
+            stu.sems.forEach(function(e){
+                temp += e.semInfo();
+            });
+            semBar.innerHTML = '';
+            semBar.innerHTML = temp;
+        }
+        else{
+            return;
+        }
     }
     
     //Test, remove later
@@ -113,34 +108,29 @@ class Semester{
             }
         }
     }
+
     
     removeCourse(){
-        alert("About to delete a semester, to cancel input a blank space and then press Enter");  
-        
-        var crs = document.getElementById("courses");
-        crs.innerHTML += '<li class="nav-item"><input type="text" id="delCr"></li>';
-
-        document.getElementById('delCr').onkeypress = function(e){
-            if (!e) e = window.event;
-            var keyCode = e.keyCode || e.which;
-            if (keyCode == '13'){
-              // Enter pressed
-              var inptVal = document.getElementById("delCr").value; 
-              if(inptVal == ""){
-                return;
-              }  
-              crs.innerHTML = crs.innerHTML.replace('<li class="nav-item"><input type="text" id="delCr"></li>','');
-              
-              for (var i = 0; i < currSem.courses.length; i++){
-                    if(currSem.courses[i].courseName == inptVal){
-                        crs.innerHTML = crs.innerHTML.replace(currSem.courses[i].crInfo(),'');
-                        var index = currSem.courses.indexOf(currSem.courses[i]);
-                        if (index > -1) {
-                          currSem.courses.splice(index, 1);
+        if (getConfirmation() == true){
+            var inptVal = currCourse.courseName;
+            var crs = document.getElementById("courses");
+            var temp = '';
+                  for (var i = 0; i < currSem.courses.length; i++){
+                        if(currSem.courses[i].courseName == inptVal){
+                            var index = currSem.courses.indexOf(currSem.courses[i]);
+                            if (index > -1) {
+                              currSem.courses.splice(index, 1);
+                            }
                         }
                     }
-                }
-            }
+                currSem.courses.forEach(function(e){
+                    temp += e.crInfo();
+                });
+            crs.innerHTML = '';
+            crs.innerHTML = temp;
+        }
+        else{
+            return;
         }
     }
     
@@ -543,3 +533,15 @@ function test(){
     selectCr("0");
     updateGradesTable();
 }
+//Generates random test data complete
+
+//Makes a confirmation dialog for deleting return user answer true or false
+function getConfirmation() {
+   var retVal = confirm("Do you want to continue with the deletion?");
+   if( retVal == true ) {
+      return true;
+   } else {
+      return false;
+   }
+}
+//Makes a confirmation dialog for deleting return user answer true or false complete
