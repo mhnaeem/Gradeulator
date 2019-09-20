@@ -412,8 +412,9 @@ function generateGraph(){
     var options = {
             title: {
                       display: true,
-                      text: 'What happens when you lend your favorite t-shirt to a girl ?',
-                      position: 'top'
+                      text: 'The proportion of each marked coursework compared to the entire course',
+                      position: 'top',
+                      fontSize: 25
                   },
             rotation: -0.7 * Math.PI
     };
@@ -546,3 +547,9 @@ function getConfirmation() {
 }
 //Makes a confirmation dialog for deleting return user answer true or false complete
 
+//Makes the right menu active if selected
+function selectMainSideBar(num){
+    var mainSideBar = document.getElementById("mainSideBar");
+    mainSideBar.innerHTML = mainSideBar.innerHTML.replace('class="nav-link active"','class="nav-link"');
+    mainSideBar.innerHTML = mainSideBar.innerHTML.replace('class="nav-link" href="#" onclick="selectMainSideBar(' + num + ')"', 'class="nav-link active" href="#" onclick="selectMainSideBar(' + num + ')"');   
+}

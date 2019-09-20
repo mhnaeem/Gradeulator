@@ -18,7 +18,7 @@
 
   </head>
 
-  <body>
+  <body onload="test()">
       <nav class="navbar navbar-dark sticky-top bg-dark flex-md p-0">
       <a class="navbar-brand col-sm-3 col-md-2 mr-0 text-uppercase text-weight-bold text-center " href="#">Gradeulator</a>
       <ul class="navbar-nav px-3">
@@ -31,44 +31,38 @@
     <div class="container-fluid">
       <div class="row">
         <nav class="col-md-2 d-none d-md-block bg-light sidebar">
-          <div class="sidebar-sticky">
-            <ul class="nav flex-column">
+          <div class="sidebar-sticky position-fixed">
+            <ul class="nav flex-column" id="mainSideBar">
               <li class="nav-item">
-                <a class="nav-link active" href="#">
+                <a class="nav-link active" href="#" onclick="selectMainSideBar(1)">
                   <span data-feather="home"></span>
-                  Dashboard <span class="sr-only">(current)</span>
+                  Dashboard <!--<span class="sr-only">(current)</span>-->
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="file"></span>
-                  Orders
+                <a class="nav-link" href="#" onclick="selectMainSideBar(2)">
+                  <span data-feather="list"></span>
+                  Courses Completed
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="shopping-cart"></span>
-                  Products
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="users"></span>
-                  Customers
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="#" onclick="selectMainSideBar(3)">
                   <span data-feather="bar-chart-2"></span>
                   Reports
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="#" onclick="selectMainSideBar(4)">
                   <span data-feather="layers"></span>
-                  Integrations
+                  GPA
                 </a>
               </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#" onclick="selectMainSideBar(5)">
+                  <span data-feather="users"></span>
+                  Account Information
+                </a>
+              </li>                
             </ul>
 
             <!-- Semesters -->
@@ -105,9 +99,10 @@
           </div>
 
           <canvas class="my-4" id="myChart" width="900" height="380"></canvas>
+            <br><br>
           <canvas class="my-4" id="myPie" width="900" height="380"></canvas>
             
-          <h2>Current Grades</h2><button onclick="test()">Populate Test Data</button>
+          <h2>Current Grades</h2> <!--<button onclick="test()">Populate Test Data</button>-->
           <div class="table-responsive">
             <table class="table table-striped table-sm">
               <thead>
