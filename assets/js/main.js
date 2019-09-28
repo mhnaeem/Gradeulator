@@ -251,7 +251,7 @@ Course.staticNum = 0;
 
 
 
-var stu = new Student('Hammad','password');
+var stu = new Student('Guest','guest');
 var currSem;
 var currCourse;
 
@@ -326,6 +326,10 @@ function generateGraph(){
     
     if (currCourse.markedStuff.length == 0){
         return;
+    }
+    
+    if(document.getElementById("viewPanel").getElementsByTagName("canvas").length != 2){
+        document.getElementById("viewPanel").innerHTML = '<canvas class="my-4" id="myChart" width="900" height="380"></canvas><br><br><canvas class="my-4" id="myPie" width="900" height="380"></canvas>' + document.getElementById("viewPanel").innerHTML; 
     }
     
     var dynamicColors = function() {
@@ -448,6 +452,7 @@ function updateGradesTable(){
 
 //Generates random test data
 function test(){
+    
     var assList = ["Assignment 1", "Assignment 2", "Assignment 3", "Assignment 4", "Assignment 5", "Assignment 6", "Assignment 7"];
     var weightList = [25, 15, 10, 10, 5, 5, 30];
     var randMark = function getRandomInt(min, max) {
@@ -554,6 +559,21 @@ function getConfirmation() {
 //Makes the right menu active if selected
 function selectMainSideBar(num){
     var mainSideBar = document.getElementById("mainSideBar");
+    for(let i = 0; i < mainSideBar.getElementsByTagName("a").length; i++){
+        if (mainSideBar.getElementsByTagName("a").item(i).className == 'nav-link active'){
+            dataAboutViewPanel["selectMainSideBar(" + (i+1) + ")"] = document.getElementById("viewPanel").innerHTML;
+        }
+    }
     mainSideBar.innerHTML = mainSideBar.innerHTML.replace('class="nav-link active"','class="nav-link"');
-    mainSideBar.innerHTML = mainSideBar.innerHTML.replace('class="nav-link" href="#" onclick="selectMainSideBar(' + num + ')"', 'class="nav-link active" href="#" onclick="selectMainSideBar(' + num + ')"');   
+    mainSideBar.innerHTML = mainSideBar.innerHTML.replace('class="nav-link" href="#" onclick="selectMainSideBar(' + num + ')"', 'class="nav-link active" href="#" onclick="selectMainSideBar(' + num + ')"');  
+    
+    document.getElementById("viewPanel").innerHTML = dataAboutViewPanel["selectMainSideBar(" + num + ")"];
+    if(num == 1){
+        generateGraph();
+    }
 }
+//Makes the right menu active if selected complete
+
+//Very important data type
+var dataAboutViewPanel = {'selectMainSideBar(2)': "hello",
+            'selectMainSideBar(3)': "hello111"};
