@@ -10,10 +10,12 @@
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link href="./assets/css/signin.css" rel="stylesheet">
+    <script type="text/javascript" src="./assets/js/login.js"></script>
+
   </head>
 
-  <body class="text-center">
+  <body class="text-center container mt-5 bg-light">
+      <div class="container mt-5 mb-5 p-5"><br></div>
     <form class="form-signin">
       <h1 class="h1 mb-3">Gradeulator</h1>
       <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
@@ -26,9 +28,13 @@
           <input type="checkbox" value="remember-me"> Remember me
         </label>
       </div>
-      <a href="./newAccount.html"><button class="btn btn-lg btn-primary" type="button">New Account</button></a>
-      <button class="btn btn-lg btn-primary" type="submit">Sign in</button>
-      <p class="mt-5 mb-3 text-muted">&copy; Muhammad Hammad | 2019</p>
     </form>
+    <a href="./newAccount.html"><button class="btn btn-lg btn-primary" type="button">New Account</button></a>
+    <button class="btn btn-lg btn-primary" type="submit" onclick="checkCredentials()">Sign in</button>
+    <div class="container mt-2 mb-1 bg-secondary p-2 rounded">
+        <h3 class="text-warning text-left">For Testing:</h3>
+        <h5 class="text-white ">Email: guest@test.com<br>Password: guest </h5>
+    </div>        
+    <p class="mb-3 text-muted">&copy; Muhammad Hammad | 2019</p>
   </body>
 </html>
