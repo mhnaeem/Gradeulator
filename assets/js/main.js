@@ -562,11 +562,11 @@ function getConfirmation() {
 //Makes a confirmation dialog for deleting return user answer true or false complete
 
 //Very important data type
-var dataAboutViewPanel = {'selectMainSideBar(2)': "<div class='container mt-5'><h4>Going to be implemented soon! Look at the courses and semesters for the time being.</h4></div>",
-            'selectMainSideBar(3)': "<div class='container mt-5'><h4>Going to be implemented soon! Look at the courses and semesters for the time being.</h4></div>",
-            'selectMainSideBar(4)': "<div class='container mt-5'><h4>Going to be implemented soon! Look at the courses and semesters for the time being.</h4></div>",
-            'selectMainSideBar(5)': "<div class='container mt-5'><h4>Going to be implemented soon! Look at the courses and semesters for the time being.</h4></div>",
-            'selectMainSideBar(6)': "<div class='container mt-5'>Help</div>"};
+var dataAboutViewPanel = {'selectMainSideBar(2)': "<div class='container mt-5'><h4>Going to be implemented soon! Go back to dashboard and play with the courses and semesters.</h4></div>",
+            'selectMainSideBar(3)': "<div class='container mt-5'><h4>Going to be implemented soon! Go back to dashboard and play with the courses and semesters.</h4></div>",
+            'selectMainSideBar(4)': "<div class='container mt-5'><h4>Going to be implemented soon! Go back to dashboard and play with the courses and semesters.</h4></div>",
+            'selectMainSideBar(5)': "<div class='container mt-5'><h4>Going to be implemented soon! Go back to dashboard and play with the courses and semesters.</h4></div>",
+            'selectMainSideBar(6)': "<div class='container mt-5'><h4>Going to be implemented soon! Go back to dashboard and play with the courses and semesters.</h4></div>"};
 
 //Makes the right menu active if selected
 function selectMainSideBar(num){
