@@ -452,6 +452,11 @@ function updateGradesTable(){
 
 //Generates random test data
 function test(){
+    //Remove Later
+    if(document.getElementById("viewPanel").getElementsByTagName("table")==null){
+        document.getElementById("viewPanel").innerHTML = '<table class="table table-striped table-sm"><thead><tr><th>Name</th><th>Total Marks</th><th>Marks Received</th><th>Weightage</th><th>Weightage Received</th><th>Add/Remove</th></tr></thead><tbody id="gradesTable"></tbody></table>';
+    }
+    //
     
     var assList = ["Assignment 1", "Assignment 2", "Assignment 3", "Assignment 4", "Assignment 5", "Assignment 6", "Assignment 7"];
     var weightList = [25, 15, 10, 10, 5, 5, 30];
@@ -556,6 +561,13 @@ function getConfirmation() {
 }
 //Makes a confirmation dialog for deleting return user answer true or false complete
 
+//Very important data type
+var dataAboutViewPanel = {'selectMainSideBar(2)': "<div class='container mt-5'><h4>Going to be implemented soon! Look at the courses and semesters for the time being.</h4></div>",
+            'selectMainSideBar(3)': "<div class='container mt-5'><h4>Going to be implemented soon! Look at the courses and semesters for the time being.</h4></div>",
+            'selectMainSideBar(4)': "<div class='container mt-5'><h4>Going to be implemented soon! Look at the courses and semesters for the time being.</h4></div>",
+            'selectMainSideBar(5)': "<div class='container mt-5'><h4>Going to be implemented soon! Look at the courses and semesters for the time being.</h4></div>",
+            'selectMainSideBar(6)': "<div class='container mt-5'>Help</div>"};
+
 //Makes the right menu active if selected
 function selectMainSideBar(num){
     var mainSideBar = document.getElementById("mainSideBar");
@@ -564,16 +576,22 @@ function selectMainSideBar(num){
             dataAboutViewPanel["selectMainSideBar(" + (i+1) + ")"] = document.getElementById("viewPanel").innerHTML;
         }
     }
+    var x = document.getElementById("titleLabel").innerHTML = mainSideBar.getElementsByTagName("a").item(num-1).innerHTML;
+    var n = x.slice(x.lastIndexOf('>')+1, x.length);
+    console.log(n);
+    document.getElementById("titleLabel").innerHTML = n;
+    
+    
     mainSideBar.innerHTML = mainSideBar.innerHTML.replace('class="nav-link active"','class="nav-link"');
     mainSideBar.innerHTML = mainSideBar.innerHTML.replace('class="nav-link" href="#" onclick="selectMainSideBar(' + num + ')"', 'class="nav-link active" href="#" onclick="selectMainSideBar(' + num + ')"');  
     
     document.getElementById("viewPanel").innerHTML = dataAboutViewPanel["selectMainSideBar(" + num + ")"];
     if(num == 1){
-        generateGraph();
+        updateGradesTable();
     }
 }
 //Makes the right menu active if selected complete
 
-//Very important data type
-var dataAboutViewPanel = {'selectMainSideBar(2)': "hello",
-            'selectMainSideBar(3)': "hello111"};
+window.onload = function(){
+    test();
+}
