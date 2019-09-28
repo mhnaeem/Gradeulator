@@ -324,6 +324,10 @@ function selectCr(n){
 //Create line graph and pie chart for current course
 function generateGraph(){
     
+    if (currCourse.markedStuff.length == 0){
+        return;
+    }
+    
     var dynamicColors = function() {
     var r = Math.floor(Math.random() * 255);
     var g = Math.floor(Math.random() * 255);
